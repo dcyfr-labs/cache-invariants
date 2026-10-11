@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm test
+      - name: Examples still trip every rule
+        run: |
+          set +e
+          node bin/cache-invariants.mjs lint examples --json > out.json
+          test $? -eq 1 && test "$(node -e 'const o=require("./out.json");console.log(new Set(o.findings.map(f=>f.rule)).size)')" -eq 4

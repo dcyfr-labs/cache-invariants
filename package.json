@@ -1,0 +1,20 @@
+{
+  "name": "@dcyfr/cache-invariants",
+  "version": "0.1.0",
+  "description": "Find the code that silently breaks LLM prompt caching: a linter for agent code and an audit for real call logs.",
+  "type": "module",
+  "exports": "./src/index.mjs",
+  "bin": { "cache-invariants": "bin/cache-invariants.mjs" },
+  "files": ["bin", "src", "README.md", "LICENSE"],
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "node --test test/lint.test.mjs test/audit.test.mjs test/cli.test.mjs",
+    "lint:examples": "node bin/cache-invariants.mjs lint examples"
+  },
+  "keywords": ["anthropic", "claude", "prompt-caching", "llm", "agents", "linter", "cost"],
+  "author": "DCYFR Labs",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "git+https://github.com/dcyfr-labs/cache-invariants.git" },
+  "bugs": "https://github.com/dcyfr-labs/cache-invariants/issues",
+  "homepage": "https://github.com/dcyfr-labs/cache-invariants#readme"
+}
