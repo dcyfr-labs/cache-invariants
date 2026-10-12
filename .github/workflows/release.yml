@@ -1,8 +1,12 @@
 name: Release
 
-# Publishes to npm when a version tag is pushed (git tag v0.1.1 && git push
-# origin v0.1.1). Uses npm Trusted Publishing: no NPM_TOKEN; npm trusts this
-# workflow file through OIDC, and the package gets a provenance attestation.
+# Stages a release on npm when a version tag is pushed (git tag v0.1.1 && git
+# push origin v0.1.1). Uses npm Trusted Publishing: no NPM_TOKEN; npm trusts
+# this workflow file through OIDC, and the package gets a provenance
+# attestation. The trusted publisher only allows `npm stage publish`, so a
+# release goes public only after a maintainer approves it with 2FA:
+#   npm stage list @dcyfr/cache-invariants
+#   npm stage approve <stage-id>
 on:
   push:
     tags: ['v*']
@@ -20,11 +24,11 @@ jobs:
         with:
           node-version: 24
           registry-url: 'https://registry.npmjs.org'
-      # Trusted Publishing needs npm >= 11.5. Bounded to 11.x: npm 12 needs a
+      # `npm stage publish` needs npm >= 11.15. Bounded to 11.x: npm 12 needs a
       # newer node 24 than setup-node may resolve, and `npm@latest` would then
       # fail with EBADENGINE.
-      - run: npm install -g npm@^11
+      - run: npm install -g npm@^11.15
       - name: Tag matches package.json
         run: test "v$(node -p 'require("./package.json").version')" = "$GITHUB_REF_NAME"
       - run: npm test
-      - run: npm publish --access public --provenance
+      - run: npm stage publish --access public --provenance

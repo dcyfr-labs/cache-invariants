@@ -1,6 +1,6 @@
 {
   "name": "@dcyfr/cache-invariants",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Find the code that silently breaks LLM prompt caching: a linter for agent code and an audit for real call logs.",
   "type": "module",
   "exports": "./src/index.mjs",
